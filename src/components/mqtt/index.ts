@@ -1,7 +1,7 @@
 import { Logger } from 'winston';
-import { logger } from '../../common/';
+import { logger, INeonService } from '../../common/';
 
-export class MqttService {
+export class MqttService implements INeonService {
   private hostname: string;
   private logger: Logger;
 
@@ -10,7 +10,9 @@ export class MqttService {
     this.logger = logger.createLogger('mqttService');
   }
 
-  public connect(): void {
+  public async start(): Promise<boolean> {
     this.logger.log('info', 'Connect to MQTT %O ', this.hostname);
+
+    return true;
   }
 }
