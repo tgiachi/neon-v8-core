@@ -17,6 +17,7 @@
         "prettier": "~2.0.5",
         "rimraf": "~3.0.2",
         "ts-jest": "~26.1.3",
+        "ts-node-dev": "^1.0.0-pre.52",
         "tsutils": "~3.17.0",
         "typescript": "~3.9.7"
     },
@@ -26,11 +27,13 @@
         "build:watch": "tsc -w -p tsconfig.release.json",
         "lint": "eslint . --ext .ts,.tsx",
         "test": "jest --coverage",
-        "test:watch": "jest --watch"
+        "test:watch": "jest --watch",
+        "debug:watch": "tsnd --respawn src/main.ts"
     },
     "author": "Jakub Synowiec <github@jakubsynowiec.info>",
     "license": "Apache-2.0",
     "dependencies": {
+        "js-yaml": "^3.14.0",
         "mqtt": "^4.1.0",
         "nedb": "^1.8.0",
         "ts-bus": "^2.3.1",

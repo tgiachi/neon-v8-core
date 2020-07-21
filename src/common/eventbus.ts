@@ -11,7 +11,7 @@ export const sendMessageToBus = (
   messageType: EventBusMessageType,
   message: any,
 ): void => {
-  log.log('debug', `sending message type ${messageType} => ${message} `);
+  log.log('debug', `sending message type ${messageType} => ${JSON.stringify(message)} `);
   bus.publish({ type: messageType, payload: message });
 };
 
@@ -22,7 +22,7 @@ export const subscribeMessageToBus = (
   bus.subscribe(messageType.toString(), (event) => {
     log.log(
       'debug',
-      `received message type ${messageType} => ${event.payload} `,
+      `received message type ${messageType} => ${JSON.stringify(event.payload)} `,
     );
 
     callback.callback(messageType, event.payload);

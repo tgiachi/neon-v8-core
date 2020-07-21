@@ -13,7 +13,9 @@ services.push(mqttService);
 
 const startServices = async (services: INeonService[]) : Promise<boolean> => {
   for(const service of services) {
-    log.log('info', `starting service ${service}`);
+    log.log('info', `configuring service: ${service.name} ${service.version}`);
+    await service.configure();
+    log.log('info', `starting service: ${service.name} ${service.version}`);
     await service.start();
   }
   return true;
