@@ -4,22 +4,27 @@ import {
   INeonService,
   sendMessageToBus,
   EventBusMessageType,
+  subscribeMessageToBus,
 } from '../../common/';
 import mqtt = require('mqtt');
 
 export class MqttService implements INeonService {
   private hostname: string;
   private logger: Logger;
+  private subscribedTopics: Map<string, any> = new Map();
   private mqttClient: mqtt.Client;
   name: string;
   version: string;
+  description: string;
 
   constructor(hostname: string) {
-    this.name = 'MQTT Service';
+    this.name = 'mqtt-service';
+    this.description = 'MQTT Service';
     this.version = 'v1.0.0';
     this.hostname = hostname;
-    this.logger = logger.createLogger('mqtt-service');
+    this.logger = logger.createLogger(this.name);
   }
+
   async configure(): Promise<boolean> {
     return true;
   }
@@ -34,10 +39,25 @@ export class MqttService implements INeonService {
       });
     });
     this.mqttClient.on('message', (topic, message) => {
+      for (const subTopic of this.subscribedTopics.keys()) {
+        const sanizedTopic = subTopic.replace('#', '');
+
+        if (topic.startsWith(sanizedTopic)) {
+          this.subscribedTopics.get(subTopic)(message.toString());
+        }
+      }
       sendMessageToBus(EventBusMessageType.MQTT_MESSAGE_RECEIVED, {
         topic,
-        message: JSON.parse(message.toString()),
+        message: message.toString(),
       });
+    });
+
+    subscribeMessageToBus(EventBusMessageType.MQTT_SUBSCRIBE_TOPIC, {
+      callback: async (_type, payload) => {
+        this.logger.info(`Subscribing to ${payload.topic}`);
+        await this.mqttClient.subscribe(payload.topic);
+        this.subscribedTopics.set(payload.topic, payload.callback);
+      },
     });
 
     return true;

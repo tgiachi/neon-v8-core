@@ -10,17 +10,21 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Logger } from 'winston';
 import * as yaml from 'js-yaml';
-import { DummyComponent } from '../components/dummy';
 
 export class NeonEngine {
-  services: INeonService[] = [];
+  services: Map<string, INeonService> = new Map();
   components: INeonComponent[] = [];
   log: Logger;
 
-  constructor(appInit: { services: INeonService[] }) {
+  constructor(appInit: {
+    services: INeonService[];
+    components: INeonComponent[];
+  }) {
     this.log = logger.createLogger('neon-engine');
-    this.services = appInit.services;
-    this.components.push(new DummyComponent());
+    for (const service of appInit.services) {
+      this.services.set(service.name, service);
+    }
+    this.components = appInit.components || [];
     this.configure();
   }
 
@@ -57,6 +61,13 @@ export class NeonEngine {
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path);
     }
+  }
+
+  public resolveService(serviceName: string) {
+    if (this.services.has(serviceName)) {
+      return this.services.get(serviceName);
+    }
+    return null;
   }
 
   private loadConfig(component: INeonComponent): boolean {
@@ -104,14 +115,14 @@ export class NeonEngine {
   private startComponent(component: INeonComponent): void {
     this.log.info(`starting component: ${component.name} ${component.version}`);
     if (this.loadConfig(component)) {
-      component.start();
+      component.start(this);
     }
   }
 
   public async start(): Promise<boolean> {
     Promise.resolve()
       .then(async () => {
-        for (const service of this.services) {
+        for (const service of this.services.values()) {
           await this.startService(service);
         }
       })

@@ -13,12 +13,14 @@ export class ApiService implements INeonService {
   log: Logger;
   port = defaultConfig.apiDefaultPort;
   apiApp: Application;
-
+  description: string;
   constructor() {
-    this.name = 'ApiService';
+    this.name = 'api-service';
+    this.description = 'ApiService';
     this.version = 'v1.0.0';
-    this.log = logger.createLogger('api-service');
+    this.log = logger.createLogger(this.name);
   }
+
   async start(): Promise<boolean> {
     this.apiApp.listen(this.port, () => {
       this.log.info(`Api server listening on port: ${this.port}`);
@@ -26,7 +28,6 @@ export class ApiService implements INeonService {
     return true;
   }
   private routes(controllers: {
-
     forEach: (arg0: (controller: any) => void) => void;
   }) {
     controllers.forEach((controller) => {
@@ -35,7 +36,6 @@ export class ApiService implements INeonService {
   }
 
   private middlewares(middleWares: {
-
     forEach: (arg0: (middleWare: any) => void) => void;
   }) {
     middleWares.forEach((middleWare) => {
@@ -52,9 +52,7 @@ export class ApiService implements INeonService {
       bodyParser.json(),
       bodyParser.urlencoded({ extended: true }),
     ]);
-    this.routes([
-      new IndexController()
-    ])
+    this.routes([new IndexController()]);
 
     return true;
   }

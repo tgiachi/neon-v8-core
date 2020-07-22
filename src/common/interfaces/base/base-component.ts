@@ -1,8 +1,10 @@
 import { INeonComponent } from '../component-interface';
+import { NeonEngine } from '../../../services';
 
 export class BaseComponent implements INeonComponent {
-  start(): Promise<boolean> {
-    throw new Error("Method not implemented.");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  start(_neonEngine: NeonEngine): Promise<boolean> {
+    throw new Error('Method not implemented.');
   }
   loadConfig(config: any) {
     throw new Error(` ${config} Method not implemented.`);

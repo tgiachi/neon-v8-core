@@ -11,9 +11,11 @@ export class SchedulerService implements INeonService {
   name: string;
   version: string;
   logger: Logger;
+  description: string;
   private jobs: Map<string, scheduler.Job> = new Map();
   constructor() {
-    this.name = 'Scheduler service';
+    this.name = "scheduler-service";
+    this.description = 'Scheduler service';
     this.version = 'v1.0.0';
   }
 

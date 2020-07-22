@@ -1,5 +1,11 @@
 import { Logger } from 'winston';
-import { logger, INeonService, defaultConfig } from '../../common';
+import {
+  logger,
+  INeonService,
+  defaultConfig,
+  subscribeMessageToBus,
+  EventBusMessageType,
+} from '../../common';
 import path = require('path');
 import fs = require('fs');
 import Datastore = require('nedb');
@@ -10,12 +16,15 @@ export class DatabaseService implements INeonService {
   private dbFullPath: string;
   name: string;
   version: string;
+  description: string;
 
   constructor() {
-    this.name = 'Database Service';
+    this.name = 'database-service';
+    this.description = 'Database Service';
     this.version = 'v1.0.0';
-    this.logger = logger.createLogger('database-service');
+    this.logger = logger.createLogger(this.name);
   }
+
   async configure(): Promise<boolean> {
     this.dbFullPath = defaultConfig.defaultDatabasePath;
     if (fs.existsSync(this.dbFullPath) === false) {
@@ -25,10 +34,13 @@ export class DatabaseService implements INeonService {
     this.logger.info(`Scanning db directory ${this.dbFullPath} `);
     this.loadDatabases(this.dbFullPath);
 
-    this.insertRecord('users', {
-      userId: 'admi4n',
-      password: 'Ok',
-      isEnabled: true,
+    subscribeMessageToBus(EventBusMessageType.SERVICE_DATABASE_PERSIST_DATA, {
+      callback: (_type, payload) => {
+        for (const record of payload.records) {
+          this.logger.debug(`Persisting data ${payload.database} ${record} `);
+          this.insertRecord(payload.database, record);
+        }
+      },
     });
 
     return true;
