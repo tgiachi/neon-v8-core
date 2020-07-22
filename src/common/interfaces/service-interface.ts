@@ -1,6 +1,6 @@
 export interface INeonService {
-  start(): Promise<boolean>;
   name: string;
   version: string;
+  start(): Promise<boolean>;
   configure(): Promise<boolean>;
 }

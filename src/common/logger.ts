@@ -8,8 +8,16 @@ const createLogger = (application: string): winston.Logger => {
     transports: [
       new winston.transports.Console({
         format: winston.format.combine(
+          winston.format.label({ label: application }),
           winston.format.colorize(),
-          winston.format.simple()),
+          winston.format.timestamp({
+            format: 'YYYY-MM-DD HH:mm:ss',
+          }),
+          winston.format.printf(
+            (info) =>
+              `${info.timestamp} - ${info.level}:  [${info.label}]: ${info.message}`,
+          ),
+        ),
       }),
     ],
   });

@@ -7,20 +7,24 @@
     "allowJs": true,
     "importHelpers": true,
     "jsx": "react",
-    "experimentalDecorators": true,
     "alwaysStrict": true,
-    "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
     "noImplicitThis": false,
     "strictNullChecks": false
   },
   "include": [
     "src/**/*",
     "__tests__/**/*"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
