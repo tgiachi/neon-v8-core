@@ -1,4 +1,4 @@
-import { MqttService, DatabaseService, SchedulerService } from './services/';
+import { MqttService, DatabaseService, SchedulerService, EventService } from './services/';
 import { logger, defaultConfig } from './common';
 import { ApiService } from './services/api';
 import { NeonEngine } from './services';
@@ -9,6 +9,7 @@ const log = logger.createLogger('neon-service');
 const neonEngine = new NeonEngine({
   services: [
     new DatabaseService(),
+    new EventService(),
     new MqttService(defaultConfig.mqttServer),
     new SchedulerService(),
     new ApiService(),

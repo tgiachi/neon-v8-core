@@ -6,6 +6,7 @@ import * as bodyParser from 'body-parser';
 import 'reflect-metadata';
 import loggerMiddleware from './middlewares/logger-middleware';
 import IndexController from './controllers/index-controller';
+import EventsController from './controllers/events-controller';
 
 export class ApiService implements INeonService {
   name: string;
@@ -52,7 +53,10 @@ export class ApiService implements INeonService {
       bodyParser.json(),
       bodyParser.urlencoded({ extended: true }),
     ]);
-    this.routes([new IndexController()]);
+    this.routes([
+      new IndexController(),
+      new EventsController(),
+    ]);
 
     return true;
   }
