@@ -1,6 +1,8 @@
 import * as express from 'express';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { IControllerBase } from '../../../common';
+import { NeonEngine } from '../../neon-core';
+import { DatabaseService } from '../../database';
 
 class EventsController implements IControllerBase {
   public path = '/';
@@ -14,23 +16,14 @@ class EventsController implements IControllerBase {
     this.router.get('/events', this.index);
   }
 
-  index = (_req: Request, res: Response) => {
-    const users = [
-      {
-        id: 1,
-        name: 'Ali',
-      },
-      {
-        id: 2,
-        name: 'Can',
-      },
-      {
-        id: 3,
-        name: 'Ahmet',
-      },
-    ];
+  index = (_req: any, res: Response) => {
+    const neonEngine = _req.neon as NeonEngine;
 
-    res.json(users);
+    const databaseService = neonEngine.resolveService(
+      'database-service',
+    ) as DatabaseService;
+
+    res.json(databaseService.loadAll('events'));
   };
 }
 

@@ -107,7 +107,7 @@ export class NeonEngine {
 
   private async startService(service: INeonService): Promise<boolean> {
     this.log.info(`configuring service: ${service.name} ${service.version}`);
-    await service.configure();
+    await service.configure(this);
     this.log.info(`starting service: ${service.name} ${service.version}`);
     return await service.start();
   }

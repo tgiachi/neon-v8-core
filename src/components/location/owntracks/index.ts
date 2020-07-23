@@ -21,12 +21,8 @@ export class OwntrackComponent extends BaseComponent {
         console.log(JSON.parse(message));
         sendMessageToBus(EventBusMessageType.SERVICE_EVENT_ADD, {
           component: this.serviceName,
-          data: JSON.parse(message)
+          data: JSON.parse(message),
         });
-        // sendMessageToBus(EventBusMessageType.SERVICE_DATABASE_PERSIST_DATA, {
-        //   database: 'events',
-        //   records: new Array(JSON.parse(message)),
-        // });
       },
     });
   }

@@ -14,7 +14,8 @@ class IndexController implements IControllerBase {
     this.router.get('/', this.index);
   }
 
-  index = (_req: Request, res: Response) => {
+  index = (_req: any, res: Response) => {
+
     const users = [
       {
         id: 1,

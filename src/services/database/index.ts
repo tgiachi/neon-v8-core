@@ -9,6 +9,7 @@ import {
 import path = require('path');
 import fs = require('fs');
 import Datastore = require('nedb');
+import { NeonEngine } from '..';
 
 export class DatabaseService implements INeonService {
   private logger: Logger;
@@ -25,7 +26,7 @@ export class DatabaseService implements INeonService {
     this.logger = logger.createLogger(this.name);
   }
 
-  async configure(): Promise<boolean> {
+  async configure(_neonEngine: NeonEngine): Promise<boolean> {
     this.dbFullPath = defaultConfig.defaultDatabasePath;
     if (fs.existsSync(this.dbFullPath) === false) {
       fs.mkdirSync(this.dbFullPath);
@@ -71,6 +72,10 @@ export class DatabaseService implements INeonService {
         });
       }
     }
+  }
+
+  public loadAll(dbName: string): any[] {
+    return this.datastore[dbName].getAllData();
   }
 
   public async start(): Promise<boolean> {
