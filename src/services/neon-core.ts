@@ -55,6 +55,15 @@ export class NeonEngine {
 
     this.createDirectoryIfNotExists(defaultConfig.configDirectory);
     this.log.info(`Config directory path: ${defaultConfig.configDirectory}`);
+
+
+    defaultConfig.scriptsDirectory = path.join(
+      defaultConfig.rootDirectory,
+      defaultConfig.scriptsDirectory
+    );
+
+    this.createDirectoryIfNotExists(defaultConfig.scriptsDirectory);
+    this.log.info(`Scripts directory path: ${defaultConfig.scriptsDirectory}`);
   }
 
   private createDirectoryIfNotExists(path: string) {

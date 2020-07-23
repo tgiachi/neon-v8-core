@@ -1,8 +1,15 @@
-import { MqttService, DatabaseService, SchedulerService, EventService } from './services/';
+import {
+  MqttService,
+  DatabaseService,
+  SchedulerService,
+  EventService,
+  RulesService,
+} from './services/';
 import { logger, defaultConfig } from './common';
 import { ApiService } from './services/api';
 import { NeonEngine } from './services';
 import { DummyComponent, OwntrackComponent } from './components';
+import { ScriptManagerService } from './services/scriptmanager';
 
 const log = logger.createLogger('neon-service');
 
@@ -12,12 +19,11 @@ const neonEngine = new NeonEngine({
     new EventService(),
     new MqttService(defaultConfig.mqttServer),
     new SchedulerService(),
+    new ScriptManagerService(),
+    new RulesService(),
     new ApiService(),
   ],
-  components: [
-    new DummyComponent(),
-    new OwntrackComponent()
-  ]
+  components: [new DummyComponent(), new OwntrackComponent()],
 });
 log.log('info', `config: ${JSON.stringify(defaultConfig)} `);
 
