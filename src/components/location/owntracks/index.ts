@@ -18,7 +18,6 @@ export class OwntrackComponent extends BaseComponent {
     sendMessageToBus(EventBusMessageType.MQTT_SUBSCRIBE_TOPIC, {
       topic: this.config.topic,
       callback: (message) => {
-        console.log(JSON.parse(message));
         sendMessageToBus(EventBusMessageType.SERVICE_EVENT_ADD, {
           component: this.serviceName,
           data: JSON.parse(message),
