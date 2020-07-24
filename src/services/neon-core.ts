@@ -56,10 +56,9 @@ export class NeonEngine {
     this.createDirectoryIfNotExists(defaultConfig.configDirectory);
     this.log.info(`Config directory path: ${defaultConfig.configDirectory}`);
 
-
     defaultConfig.scriptsDirectory = path.join(
       defaultConfig.rootDirectory,
-      defaultConfig.scriptsDirectory
+      defaultConfig.scriptsDirectory,
     );
 
     this.createDirectoryIfNotExists(defaultConfig.scriptsDirectory);
@@ -75,6 +74,15 @@ export class NeonEngine {
   public resolveService(serviceName: string) {
     if (this.services.has(serviceName)) {
       return this.services.get(serviceName);
+    }
+    return null;
+  }
+  public getService<T = INeonService>(c: new () => T): T {
+    console.log(typeof c);
+    for (const service of this.services.keys()) {
+      if (typeof c === typeof this.services[service]) {
+        return this.services[service];
+      }
     }
     return null;
   }

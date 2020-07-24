@@ -74,6 +74,26 @@ export class DatabaseService implements INeonService {
     }
   }
 
+  raplaceRecord(dbName: string, query: any, newObject: any) {
+    if (this.datastore[dbName] === undefined) {
+      this.insertRecord(dbName, newObject);
+      return;
+    }
+
+    this.datastore[dbName].findOne(query, (err, doc) => {
+      if (!err) {
+        if (doc !== null) {
+          this.datastore[dbName].remove(query, { multi: true }, (_err, _n) => {
+            this.insertRecord(dbName, newObject);
+          });
+        } else {
+          this.logger.debug(`insert record on dbName: ${dbName}`);
+          this.insertRecord(dbName, newObject);
+        }
+      }
+    });
+  }
+
   public loadAll(dbName: string): any[] {
     return this.datastore[dbName].getAllData();
   }
