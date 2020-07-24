@@ -18,6 +18,9 @@ export class EventService implements INeonService {
     this.description = 'Events Service';
     this.version = 'v1.0.0';
   }
+  exportedContext() {
+    return undefined;
+  }
   start(): Promise<boolean> {
     subscribeMessageToBus(EventBusMessageType.SERVICE_EVENT_ADD, {
       callback: this.processAddEvent.bind(this),
@@ -43,7 +46,7 @@ export class EventService implements INeonService {
     dbService.raplaceRecord(
       'entities',
       { component: payload.component },
-      { component: payload.component, ...rawRecord},
+      { component: payload.component, ...rawRecord },
     );
 
     sendMessageToBus(EventBusMessageType.SERVICE_EVENT_RECEIVED, record);

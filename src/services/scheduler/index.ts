@@ -19,6 +19,9 @@ export class SchedulerService implements INeonService {
            this.description = 'Scheduler service';
            this.version = 'v1.0.0';
          }
+  exportedContext() {
+    return undefined;
+  }
 
          async start(): Promise<boolean> {
            return true;

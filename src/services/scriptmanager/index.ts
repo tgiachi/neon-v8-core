@@ -25,6 +25,7 @@ export class ScriptManagerService implements INeonService {
     return Promise.resolve(true);
   }
   configure(_neonEngine: NeonEngine): Promise<boolean> {
+    this.neonEngine = _neonEngine;
     this.loadScripts();
     this.startWatchDirectory(defaultConfig.scriptsDirectory);
     return Promise.resolve(true);
@@ -54,7 +55,7 @@ export class ScriptManagerService implements INeonService {
     try {
       const virtualMachine = new VM({
         timeout: 1000,
-        sandbox: this.buildContext(),
+        sandbox: {...this.neonEngine.context },
       });
       this.logger.info(`Executing script ${path}`);
       const content = fs.readFileSync(path);
@@ -65,7 +66,7 @@ export class ScriptManagerService implements INeonService {
     }
   }
 
-  private buildContext() {
+  exportedContext() {
     return {
       neonEngine: this.neonEngine,
       console: {

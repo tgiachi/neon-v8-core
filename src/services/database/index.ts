@@ -25,6 +25,9 @@ export class DatabaseService implements INeonService {
     this.version = 'v1.0.0';
     this.logger = logger.createLogger(this.name);
   }
+  exportedContext() {
+   return undefined;
+  }
 
   async configure(_neonEngine: NeonEngine): Promise<boolean> {
     this.dbFullPath = defaultConfig.defaultDatabasePath;

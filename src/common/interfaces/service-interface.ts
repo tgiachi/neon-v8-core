@@ -6,4 +6,5 @@ export interface INeonService {
   version: string;
   start(): Promise<boolean>;
   configure(neonEngine: NeonEngine): Promise<boolean>;
+  exportedContext(): any;
 }

@@ -25,6 +25,9 @@ export class MqttService implements INeonService {
            this.hostname = hostname;
            this.logger = logger.createLogger(this.name);
          }
+  exportedContext() {
+    return undefined;
+  }
 
          async configure(_neonEngine: NeonEngine): Promise<boolean> {
            return true;

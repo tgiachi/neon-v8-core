@@ -3,10 +3,11 @@ import {
   logger,
   subscribeMessageToBus,
   EventBusMessageType,
+  IRule,
 } from '../../common';
 import { NeonEngine } from '../neon-core';
 import { Logger } from 'winston';
-import { Engine } from 'json-rules-engine';
+import { Engine, NestedCondition } from 'json-rules-engine';
 
 export class RulesService implements INeonService {
   name: string;
@@ -14,6 +15,7 @@ export class RulesService implements INeonService {
   version: string;
   logger: Logger;
   ruleEngine: Engine;
+  ruleCallbacks: Map<string, any> = new Map();
 
   constructor() {
     this.name = 'rules-service';
@@ -21,6 +23,13 @@ export class RulesService implements INeonService {
     this.version = 'v1.0.0';
     this.logger = logger.createLogger(this.name);
     this.ruleEngine = new Engine();
+  }
+  exportedContext() {
+    return {
+      rules: {
+        addRule: this.addRule.bind(this),
+      },
+    };
   }
 
   start(): Promise<boolean> {
@@ -35,11 +44,39 @@ export class RulesService implements INeonService {
 
   private async processEvents(_type: EventBusMessageType, payload: any) {
     this.logger.info(`Processing event: ${payload.component}`);
-    await this.ruleEngine.run(payload);
+    const results = await this.ruleEngine.run(payload);
+
+    for (const evt of results.events) {
+      if (this.ruleCallbacks.has(evt.type)) {
+        this.ruleCallbacks.get(evt.type)(payload);
+      }
+    }
     // console.log(results);
   }
 
-  addRule(rule: any) {
-    this.ruleEngine.addRule(rule);
+  addRule(rule: IRule, callback: any) {
+
+    const flattedRules: NestedCondition[] = [];
+    flattedRules.concat(
+      rule.rules.map((value) => {
+        return {
+          fact: value.propertyName,
+          operator: value.operator,
+          value: value.value,
+        };
+      }),
+    );
+
+    this.ruleEngine.addRule({
+      name: rule.ruleName,
+      conditions: {
+        all: [...flattedRules],
+      },
+      event: {
+        type: rule.ruleName,
+      },
+    });
+
+    this.ruleCallbacks.set(rule.ruleName, callback);
   }
 }

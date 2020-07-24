@@ -24,6 +24,9 @@ export class ApiService implements INeonService {
     this.version = 'v1.0.0';
     this.log = logger.createLogger(this.name);
   }
+  exportedContext() {
+   return undefined;
+  }
 
   async start(): Promise<boolean> {
     this.apiApp.listen(this.port, () => {

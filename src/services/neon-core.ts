@@ -15,6 +15,7 @@ export class NeonEngine {
   services: Map<string, INeonService> = new Map();
   components: INeonComponent[] = [];
   log: Logger;
+  public context: {};
 
   constructor(appInit: {
     services: INeonService[];
@@ -125,6 +126,11 @@ export class NeonEngine {
   private async startService(service: INeonService): Promise<boolean> {
     this.log.info(`configuring service: ${service.name} ${service.version}`);
     await service.configure(this);
+    const serviceContext = service.exportedContext();
+    if (serviceContext !== undefined) {
+      const globalContext = this.context;
+      this.context = { ...globalContext, ...serviceContext };
+    }
     this.log.info(`starting service: ${service.name} ${service.version}`);
     return await service.start();
   }
