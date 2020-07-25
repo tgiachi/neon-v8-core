@@ -3,3 +3,4 @@ export * from "./eventbus";
 export * from "./config";
 export * from "./app-config";
 export * from "./interfaces";
+export * from "./messages";

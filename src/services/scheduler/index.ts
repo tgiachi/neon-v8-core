@@ -37,7 +37,7 @@ export class SchedulerService implements INeonService {
                  );
                  const job = scheduler.scheduleJob(
                    payload.name,
-                   payload.name,
+                   payload.cron,
                    payload.callback,
                  );
                  this.jobs.set(payload.name, job);

@@ -1,6 +1,6 @@
 import { BaseComponent } from '../../../common/interfaces/base/base-component';
 import { neonComponent } from '../../../common/decorators';
-import { NeonEngine, SchedulerService } from '../../../services';
+import { messagesHelper } from '../../../common';
 @neonComponent('Clock', '1.0', 'clock')
 export class ClockComponent extends BaseComponent {
   constructor() {
@@ -9,9 +9,16 @@ export class ClockComponent extends BaseComponent {
   }
 
   start(_neonEngine: NeonEngine):Promise<boolean> {
-    const schedulerService = _neonEngine.resolveService('scheduler-service') as SchedulerService;
+    messagesHelper.buildSchedulerAddJob(
+      'clock',
+      '* * * * *',
+      this.processClock.bind(this),
+    );
 
     return Promise.resolve(true);
 
+  }
+  processClock() {
+    console.log("");
   }
 }
