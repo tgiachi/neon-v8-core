@@ -37,7 +37,7 @@ export class ScriptManagerService implements INeonService {
 
     for (const f of files) {
       this.logger.info(`Loading file ${f}`);
-      this.executeScript(path.join(defaultConfig.scriptsDirectory, f));
+      // this.executeScript(path.join(defaultConfig.scriptsDirectory, f));
     }
   }
   private startWatchDirectory(directoryName: string) {

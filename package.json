@@ -33,6 +33,7 @@
         "build:watch": "tsc -w -p tsconfig.release.json",
         "lint": "eslint . --ext .ts,.tsx",
         "test": "jest --coverage",
+        "start": "ts-node src/main.ts",
         "test:watch": "jest --watch",
         "debug:watch": "tsnd --respawn src/main.ts"
     },
@@ -55,6 +56,7 @@
         "reflect-metadata": "^0.1.13",
         "supports-color": "^7.1.0",
         "ts-bus": "^2.3.1",
+        "ts-node": "^8.10.2",
         "tslib": "~2.0.0",
         "vm2": "^3.9.2",
         "winston": "^3.3.3"

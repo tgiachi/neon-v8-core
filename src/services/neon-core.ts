@@ -106,19 +106,24 @@ export class NeonEngine {
       this.log.info(
         `Saving default config for component ${component.serviceName}`,
       );
-      const yamlStr = yaml.safeDump(component.defaultConfig());
-      fs.writeFileSync(componentConfigFile, yamlStr, 'utf8');
+      const defaultConfig = component.defaultConfig();
+      if (defaultConfig !== undefined) {
+        const yamlStr = yaml.safeDump(defaultConfig);
+        fs.writeFileSync(componentConfigFile, yamlStr, 'utf8');
+      }
     }
 
-    const yamlStr = fs.readFileSync(componentConfigFile);
+    if (fs.existsSync(componentConfigFile)) {
+      const yamlStr = fs.readFileSync(componentConfigFile);
 
-    const data = yaml.load(yamlStr.toString());
-    if (data.isEnabled !== undefined && data.isEnabled !== false) {
-      this.log.info(
-        `Loading config for component ${component.serviceName}: ${data.isEnabled}`,
-      );
-      component.loadConfig(data);
-      return true;
+      const data = yaml.load(yamlStr.toString());
+      if (data.isEnabled !== undefined && data.isEnabled !== false) {
+        this.log.info(
+          `Loading config for component ${component.serviceName}: ${data.isEnabled}`,
+        );
+        component.loadConfig(data);
+        return true;
+      }
     }
     return false;
   }

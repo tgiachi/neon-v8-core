@@ -1,0 +1,5 @@
+# .dockerignore
+# don't copy files in node_modules folder
+node_modules
+# but the-repo-package folder is an exception
+!node_modules/the-repo-package

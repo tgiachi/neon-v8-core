@@ -31,7 +31,7 @@ export class SchedulerService implements INeonService {
            subscribeMessageToBus(
              EventBusMessageType.SERVICE_SCHEDULER_ADD_JOB,
              {
-               callback: (payload: any) => {
+               callback: (_type: any, payload: any) => {
                  this.logger.info(
                    `Adding job name ${payload.name}: CRON: ${payload.cron} `,
                  );
