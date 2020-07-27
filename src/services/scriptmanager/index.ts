@@ -53,9 +53,10 @@ export class ScriptManagerService implements INeonService {
 
   private executeScript(path: string) {
     try {
+      const context = {...this.neonEngine.context, ... this.createLoggerByName(path)};
       const virtualMachine = new VM({
         timeout: 1000,
-        sandbox: {...this.neonEngine.context },
+        sandbox: context,
       });
       this.logger.info(`Executing script ${path}`);
       const content = fs.readFileSync(path);
@@ -66,6 +67,12 @@ export class ScriptManagerService implements INeonService {
     }
   }
 
+  createLoggerByName(filename: string) {
+    return {
+      logger: logger.createLogger(path.basename(filename)),
+    };
+  }
+
   exportedContext() {
     return {
       neonEngine: this.neonEngine,
@@ -74,7 +81,7 @@ export class ScriptManagerService implements INeonService {
           debug('script')(text);
         },
       },
-      logger: logger.createLogger('script'),
+      //logger: logger.createLogger('script'),
     };
   }
 }

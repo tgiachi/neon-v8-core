@@ -11,6 +11,7 @@ import { NeonEngine } from './services';
 import { DummyComponent, OwntrackComponent } from './components';
 import { ScriptManagerService } from './services/scriptmanager';
 import { ClockComponent } from './components/common/clock';
+import { TelegramBotComponent } from './components/messaging/telegram';
 
 const log = logger.createLogger('neon-service');
 
@@ -24,7 +25,7 @@ const neonEngine = new NeonEngine({
     new RulesService(),
     new ApiService(),
   ],
-  components: [new DummyComponent(), new OwntrackComponent(), new ClockComponent()],
+  components: [new DummyComponent(), new OwntrackComponent(), new ClockComponent(), new TelegramBotComponent()],
 });
 log.log('info', `config: ${JSON.stringify(defaultConfig)} `);
 
