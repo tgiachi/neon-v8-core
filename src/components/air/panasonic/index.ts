@@ -24,9 +24,14 @@ export class PanasonicAirComponent extends BaseComponent {
 
   async start(_neonEngine: NeonEngine): Promise<boolean> {
     this.client = new ComfortCloudClient();
-    const token = await this.client.login(this.username, this.username);
-    this.logger.info("TOKEN");
-    this.logger.info(token);
+    try {
+      const token = await this.client.login(this.username, this.username);
+      this.logger.info('TOKEN');
+      this.logger.info(token);
+    } catch (err) {
+      this.logger.error(`Error during login to panasonic comfort cloud ${err}`);
+    }
+
     return true;
   }
 

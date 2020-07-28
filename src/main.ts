@@ -8,7 +8,7 @@ import {
 import { logger, defaultConfig } from './common';
 import { ApiService } from './services/api';
 import { NeonEngine } from './services';
-import { DummyComponent, OwntrackComponent } from './components';
+import { DummyComponent, OwntrackComponent, WeatherStackComponent } from './components';
 import { ScriptManagerService } from './services/scriptmanager';
 import { ClockComponent } from './components/common/clock';
 import { TelegramBotComponent } from './components/messaging/telegram';
@@ -36,6 +36,7 @@ const neonEngine = new NeonEngine({
     new SpotifyComponent(),
     new PhilipsHueComponent(),
     new PanasonicAirComponent(),
+    new WeatherStackComponent(),
   ],
 });
 log.log('info', `config: ${JSON.stringify(defaultConfig)} `);
