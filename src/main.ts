@@ -14,6 +14,7 @@ import { ClockComponent } from './components/common/clock';
 import { TelegramBotComponent } from './components/messaging/telegram';
 import { SpotifyComponent } from './components/entertainment/spotify';
 import { PhilipsHueComponent } from './components/lights/philips_hue';
+import { PanasonicAirComponent } from './components/air/panasonic';
 
 const log = logger.createLogger('neon-service');
 
@@ -33,7 +34,8 @@ const neonEngine = new NeonEngine({
     new ClockComponent(),
     new TelegramBotComponent(),
     new SpotifyComponent(),
-    new PhilipsHueComponent()
+    new PhilipsHueComponent(),
+    new PanasonicAirComponent(),
   ],
 });
 log.log('info', `config: ${JSON.stringify(defaultConfig)} `);
